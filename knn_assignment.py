@@ -115,12 +115,12 @@ if __name__ == "__main__":
     mean_acc_l2 = [np.mean(cv_accuracies_l2[k]) for k in k_choices]
     
     for idx, k in enumerate(k_choices):
-        print(f"K={k} -> L1 mean accuracy: {mean_acc_l1[idx]:.4f}, L2 평균 정확도: {mean_acc_l2[idx]:.4f}")
+        print(f"K={k} -> L1 mean accuracy: {mean_acc_l1[idx]:.4f}, L2 mean accuracy: {mean_acc_l2[idx]:.4f}")
     
     best_k = k_choices[np.argmax(mean_acc_l1)]
     print(f"\nBest hyperparameter: Distance=L1, K={best_k}")
 
-    print("\ntest by best hyperparameter...")
+    print("\ntest by best hyperparameter")
     final_knn = KNearestNeighbor()
     final_knn.train(X_train, y_train)
     dists_test = final_knn.compute_distances_l1(X_test)
