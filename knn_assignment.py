@@ -38,12 +38,10 @@ class KNearestNeighbor:
         pass
 
     def train(self, X, y):
-        """KNN은 별도의 학습 과정 없이 데이터를 메모리에 저장만 합니다."""
         self.X_train = X
         self.y_train = y
 
     def compute_distances_l1(self, X):
-        """L1 Distance (Manhattan) 계산"""
         num_test = X.shape[0]
         num_train = self.X_train.shape[0]
         dists = np.zeros((num_test, num_train))
@@ -53,7 +51,6 @@ class KNearestNeighbor:
         return dists
 
     def compute_distances_l2(self, X):
-        """L2 Distance (Euclidean) 계산"""
         num_test = X.shape[0]
         num_train = self.X_train.shape[0]
         dists = np.zeros((num_test, num_train))
@@ -69,7 +66,6 @@ class KNearestNeighbor:
             y_pred[i] = Counter(closest_y).most_common(1)[0][0]
         return y_pred
 
-# 혼동 행렬 출력 함수 (from scratch)
 def print_confusion_matrix(y_true, y_pred, num_classes=10):
     cm = np.zeros((num_classes, num_classes), dtype=int)
     for t, p in zip(y_true, y_pred):
@@ -115,17 +111,16 @@ if __name__ == "__main__":
             cv_accuracies_l2[k].append(acc_l2)
         print(f"Fold {i+1}/5 ")
 
-    # 평균 정확도 계산
     mean_acc_l1 = [np.mean(cv_accuracies_l1[k]) for k in k_choices]
     mean_acc_l2 = [np.mean(cv_accuracies_l2[k]) for k in k_choices]
     
     for idx, k in enumerate(k_choices):
-        print(f"K={k} -> L1 mean accuracy: {mean_acc_l1[idx]:.4f}, L2 평균 정확도: {mean_acc_l2[idx]:.4f}")
+        print(f"K={k} -> L1 mean accuracy: {mean_acc_l1[idx]:.4f}, L2 mean accuracy: {mean_acc_l2[idx]:.4f}")
     
     best_k = k_choices[np.argmax(mean_acc_l1)]
     print(f"\nBest hyperparameter: Distance=L1, K={best_k}")
 
-    print("\ntest by best hyperparameter...")
+    print("\ntest by best hyperparameter")
     final_knn = KNearestNeighbor()
     final_knn.train(X_train, y_train)
     dists_test = final_knn.compute_distances_l1(X_test)
