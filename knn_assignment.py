@@ -56,12 +56,26 @@ class KNearestNeighbor:
         return y_pred
 
 
-def print_confusion_matrix(y_true, y_pred, num_classes=10):
+def plot_confusion_matrix(y_true, y_pred, num_classes=10):
     cm = np.zeros((num_classes, num_classes), dtype=int)
     for t, p in zip(y_true, y_pred):
         cm[t, p] += 1
-    print("\n[Confusion Matrix]")
-    print(cm)
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    im = ax.imshow(cm, cmap='Blues')
+    ax.set_xlabel('Predicted')
+    ax.set_ylabel('True')
+    ax.set_title('Confusion Matrix')
+    ax.set_xticks(range(num_classes))
+    ax.set_yticks(range(num_classes))
+
+    for i in range(num_classes):
+        for j in range(num_classes):
+            text = ax.text(j, i, cm[i, j], ha="center", va="center",
+                          color="white" if cm[i, j] > cm.max() / 2 else "black", fontsize=9)
+
+    fig.colorbar(im, ax=ax)
+    plt.tight_layout()
 
 
 if __name__ == "__main__":
@@ -114,7 +128,7 @@ if __name__ == "__main__":
     y_test_pred = final_knn.predict_labels(dists_test, k=best_k)
 
     print(f"Last test Accuracy: {np.mean(y_test_pred == y_test):.4f}")
-    print_confusion_matrix(y_test, y_test_pred)
+    plot_confusion_matrix(y_test, y_test_pred)
 
     # plot
     fig, ax = plt.subplots(figsize=(10, 6))
